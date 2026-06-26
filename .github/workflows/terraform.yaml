@@ -47,7 +47,6 @@ jobs:
           path: tfplan.txt
 
     - name: Terraform Apply
-      needs: Terraform Plan
       if: github.event_name == 'push'
       run: terraform apply -auto-approve
 
