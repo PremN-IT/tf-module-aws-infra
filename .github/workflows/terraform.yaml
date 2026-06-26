@@ -1,6 +1,6 @@
 # CICD Pipeline file for EKS Deplopment using Terraform 
 
-name: Terraform
+name: Terraform deployment for EKS Cluster
 
 on:
   push:
