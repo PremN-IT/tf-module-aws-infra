@@ -1,0 +1,56 @@
+# CICD Pipeline file for EKS Deplopment using Terraform 
+
+name: Terraform
+
+on:
+  push:
+    branches:
+      - main
+        
+permissions:
+  id-token: write
+  contents: read
+  
+jobs:
+  terraform: 
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0
+    
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::900840136277:role/GitHub-OIDC-role
+        aws-region: us-east-1
+        
+        
+    - name: Terraform Init 
+      run: terraform init
+
+      
+    - name: Terraform Plan 
+      run: terraform plan -out=tfplan
+   
+    - name: Generate Readable Plan Output
+      run: terraform show -no-color tfplan > tfplan.txt
+
+    - name: Upload Plan Artifact
+      uses: actions/upload-artifact@v4
+      with:
+          name: terraform-plan
+          path: tfplan.txt
+
+    - name: Terraform Apply
+      needs: Terraform Plan
+      if: github.event_name == 'push'
+      run: terraform apply -auto-approve
+
+  
+    #- name: Terraform Destroy
+    #  run: terraform destroy -auto-approve
