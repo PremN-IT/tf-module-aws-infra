@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main
 
   tags = {
-    Name = eks-igw
+    Name = "eks-igw"
     }
   }
 
@@ -53,7 +53,7 @@ resource "aws_route_table" "public_rt" {
 resource "aws_nat_gateway" "main" {
   count         = length(var.public_subnet_cidrs)
   allocation_id = aws_eip.nat[count.index].id
-  subnet_id     = aws_subnet.public[count.index].id
+  subnet_id     = aws_subnet.public_subnet[count.index].id
 
   tags = {
     Name = "${var.cluster_name}-nat-${count.index + 1}"
