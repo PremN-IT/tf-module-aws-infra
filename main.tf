@@ -1,5 +1,5 @@
 module "vpc" {
-source = "./tf-module-aws-infra/module/Networking"
+source = "./module/Networking"
 vpc_cidr = var.vpc_cidr
 availability_zones = var.availability_zones
 private_subnet_cidrs = var.private_subnet_cidrs
@@ -9,7 +9,7 @@ cluster_name  = var.cluster_name
 }
 
 module "eks" {
-source = "./tf-module-aws-infra/module/EKS"
+source = "./module/EKS"
  cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
   vpc_id          = module.vpc.vpc_id
